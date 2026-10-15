@@ -1,0 +1,617 @@
+diff --git a/.DS_Store b/.DS_Store
+deleted file mode 100644
+index 33cec24d5e40ad1f92c4cc225880924fb6758e10..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 6148
+zcmeHKO-~a+7=EWz*n-INQADCiV=pFr2m#WAF_Z<O6&1n~qypA$cPJZ{nPzuOMMBcE
+zCjJ0_fIq+!C*#Gx;K7Uj01uwL>N~U3@TDPKjM06YndhB(Kc??9nVnq#AV$?51<(ON
+z!zM7^irp_n*hM=fF*VbSNMw#(2w)R9Fc>=J9Zf_GL=60G42ZMa3nTa&f(jfxzZ+1+
+zb8LeJ+dxqZP;<f0xx7?#c@g8pL&Lx}{6h+A=gd{C`4yGxpjdGoKNuPLNMcR#3(YNB
+zi`J&Co146523An@4a-{<qb1JWVnerz%MPs-^qy(X0?T34lL3xR(PizC!)#tNc$L|{
+zj5R}pme3Lfy>D+XGclMN8_DbsruIh1CvcD%%k1wbv}F3`t;NEYyUq9uSrrg`zDa3U
+z*npR)oQprFw4-V!?;16K*7Zi!iPpA@?Uy?A&aUpxp3Y=4*?YO~N`L>=g5F)UN?T=5
+zR5Q(8?ip^Ct~e#mOy@aW3FxyxC<VRigx?~ypBzpt?N-pI=Ws&iy5mvGR?D7a&u?t_
+zG*~&J=L>p=U-G!?E^yxo9M1A<K5j%VpxZgN!EwbM+=TgxF!{^W^AS(QtmG}vvsjrL
+zyX&r1r0zU3co6Vy;VH6VAqyTAndI7L#VR?hoSys^GM&yYG?W{mqC+}V@OIKk`u*k?
+zIb33#(L^Ghol{l~24D*Afr&R$4PL=(cmoIU0Y1T3_)g-ams}?UWSrb4ljJVRkvXzN
+z^5ijD4dY{toxi5?DIhi~=i2!l(_=1YWsDO!Ti`zAU>auOA^x}76X)tJdK^7h30OqW
+zDVTu=h{Jd$?c)*T`iTe}o*}9-t?dlI$Q&^cG4TH}Af68?Yyz_i>mkZV2X-+W3VU3j
+z5Y)wMfxwi)tipPTXh9)iC}J2&)F%cB!*M>P{IUw`A%@{V<jR;wtxVJx3X!Yhd`h|l
+z$%Yv95d#qe#~Ek}hq}1`XMg|we>^A}MGQm?{8J2&_>4JYU`gt3Jyo2zYg5>sViO|#
+p>LJPy?9_EE6>$~!VUvQklu!_}3hN=_3`+DOAZduYh=D)Kz)#iu1<3#a
+
+diff --git a/.gitignore b/.gitignore
+index 83972fa..ea856f6 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,3 +1,6 @@
++# macOS
++.DS_Store
++
+ # Byte-compiled / optimized / DLL files
+ __pycache__/
+ *.py[codz]
+diff --git a/00-how-network-devices-behave/how-network-devices-behave.md b/00-how-network-devices-behave/how-network-devices-behave.md
+deleted file mode 100644
+index a028b89..0000000
+--- a/00-how-network-devices-behave/how-network-devices-behave.md
++++ /dev/null
+@@ -1,32 +0,0 @@
+-# Module 00: How Network Devices Behave
+-
+-## Overview
+-
+-As network engineers, we spend years mastering the Command Line Interface (CLI) of routers, switches, and firewalls. However, managing dozens or hundreds of devices box-by-box does not scale.
+-
+-When you introduce **Python** into your workflow, your perspective changes: instead of treating each router as an isolated box, you start **treating the network as an integrated, programmable system**.
+-
+----
+-
+-## Key Concepts Covered in This Module
+-
+-### 1. The Networking Analogy: Virtual Environments (`venv`) are like
+-
+-* **The Problem:** Your operating system uses a "system Python" for internal tools. If you install automation libraries globally, version conflicts can break your environment.
+-* **The Solution:** A Python Virtual Environment (`venv`) is an **isolated sandbox**—exactly like a **VRF (Virtual Routing and Forwarding)** or a VLAN. It isolates your project dependencies without affecting the host operating system.
+-
+-### 2. The Interactive Shell (IPython REPL)
+-
+-* **The Analogy:** Using **IPython** for testing code snippets is just like typing `show ip interface brief` directly into a router's CLI to inspect live states.
+-* **Script Files (`.py`):** Writing a Python script file is like preparing a full configuration template and pushing it to the device.
+-
+----
+-
+-## Quick Setup & Lab Execution
+-
+-1. Create and activate your virtual environment:
+-
+-   ```bash
+-   python3 -m venv netauto_venv
+-   source netauto_venv/bin/activate
+-   ```
+diff --git a/01-fundamentals-and-syntax/fundamentals-and-syntax.md b/01-fundamentals-and-syntax/fundamentals-and-syntax.md
+deleted file mode 100644
+index c5209f8..0000000
+--- a/01-fundamentals-and-syntax/fundamentals-and-syntax.md
++++ /dev/null
+@@ -1,52 +0,0 @@
+-# Module 01: Python Fundamentals and Syntax for Network Engineers
+-
+-## Overview
+-
+-Python has strict rules and community standards just like networking protocols (e.g., OSPF, BGP). This module covers core syntax, data types (`int`, `str`, `list`, `dict`), and style conventions tailored for network automation.
+-
+----
+-
+-## Key Concepts & Networking Comparisons
+-
+-### 1. Indentation Defines Code Blocks
+-
+-* Unlike other programming languages that use curly braces `{ }`, Python uses **indentation** (4 spaces) to group blocks of code.
+-* *Network Analogy:* Think of how sub-commands under `interface GigabitEthernet0/0` or `router ospf 1` are indented in a Cisco IOS configuration.
+-
+-### 2. Variables and Naming Rules
+-
+-* A variable is a labeled container in memory (like a host-macro or alias).
+-* **The Common Network Engineer Mistake:** In CLI configs or DNS, we love hyphens (`core-rtr-01`). In Python, hyphens are interpreted as subtraction (`minus`). Always use **snake_case** with underscores (`core_rtr_01`).
+-
+-| Element Type | Naming Convention | Network Example |
+-| :--- | :--- | :--- |
+-| **Variables / Functions** | `snake_case` | `router_hostname`, `get_bgp_status()` |
+-| **Constants** | `UPPER_SNAKE_CASE` | `DEFAULT_SSH_PORT = 22` |
+-| **Classes** | `PascalCase` | `CiscoIosSSH` |
+-
+-### 3. Standard Input & Output (`print` and `input`)
+-
+-* `print()` sends data to `stdout` (the terminal screen).
+-* `input()` pauses execution to capture `stdin` from the user.
+-* **Critical Rule:** Everything returned by `input()` is always a **String (`str`)**, even if the user types numbers (like a VLAN ID). You must explicitly convert types when doing mathematical or logical checks.
+-
+----
+-
+-## Lab Exercise Example (`device_prompt.py`)
+-
+-A basic script demonstrating variables, `input()`, and `print()` with a proper Linux shebang line:
+-
+-```python
+-#!/usr/bin/env python
+-
+-# Prompt the network engineer for device details
+-device_hostname = input("Enter the device hostname: ")
+-mgmt_ip_addr = input("Enter the management IP address: ")
+-
+-# Print the collected information to standard output
+-print("-" * 40)
+-print(f"Target Device Hostname: {device_hostname}")
+-print(f"Target Management IP:   {mgmt_ip_addr}")
+-print(f"Data type of IP var:    {type(mgmt_ip_addr)}")
+-print("-" * 40)
+-```
+diff --git a/week1_python_for_network_engineers_guide.md b/01-fundamentals-and-syntax/guide.md
+similarity index 99%
+rename from week1_python_for_network_engineers_guide.md
+rename to 01-fundamentals-and-syntax/guide.md
+index b9d83a2..7362779 100644
+--- a/week1_python_for_network_engineers_guide.md
++++ b/01-fundamentals-and-syntax/guide.md
+@@ -1,3 +1,9 @@
++---
++title: "Week 1 — Fundamentals and Syntax"
++source: "Study notes based on Kirk Byers, Learning Python for Network Engineers (Lesson 1)"
++status: needs-review
++---
++
+ # Learning Python for Network Engineers — Week 1 Study Guide
+ 
+ **Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / [twin-bridges/learning_python](https://github.com/twin-bridges/learning_python))  
+diff --git a/week2_python_for_network_engineers_guide.md b/02-data-types-files-and-lists/guide.md
+similarity index 99%
+rename from week2_python_for_network_engineers_guide.md
+rename to 02-data-types-files-and-lists/guide.md
+index 2bdfff8..9b93cf6 100644
+--- a/week2_python_for_network_engineers_guide.md
++++ b/02-data-types-files-and-lists/guide.md
+@@ -1,3 +1,9 @@
++---
++title: "Week 2 — Data Types, Files and Lists"
++source: "Study notes based on Kirk Byers, Learning Python for Network Engineers (Lesson 2)"
++status: needs-review
++---
++
+ # Learning Python for Network Engineers — Week 2 Study Guide
+ **Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / Lesson 2)  
+ **Target Audience:** Network Engineers transitioning to Network Automation  
+@@ -348,7 +354,7 @@ print(data)
+ #### Why You Should Always Use Context Managers:
+ 1. **Automatic Closing & Flushing:** The moment your code leaves the 4-space indented block, Python automatically calls `f.flush()` (if writing/appending) and `f.close()`.
+ 2. **Guaranteed Cleanup During Crashes (Exceptions):**  
+-   Imagine your script opens a file (or an SSH session to a Cisco router) without a context manager, and an unexpected error crashes your script on the next line. The `f.close()` line is never reached, leaving unushed files or hung VTY/SSH sessions!  
++   Imagine your script opens a file (or an SSH session to a Cisco router) without a context manager, and an unexpected error crashes your script on the next line. The `f.close()` line is never reached, leaving unflushed files or hung VTY/SSH sessions!  
+    **With a Context Manager, cleanup ALWAYS happens.** Even if an unhandled exception crashes your code inside the `with` block, Python guarantees that the file is gracefully flushed and closed before the program exits.
+ 
+ ---
+diff --git a/week3_python_for_network_engineers_guide.md b/03-flow-control/guide.md
+similarity index 99%
+rename from week3_python_for_network_engineers_guide.md
+rename to 03-flow-control/guide.md
+index 3e85011..fd1b79c 100644
+--- a/week3_python_for_network_engineers_guide.md
++++ b/03-flow-control/guide.md
+@@ -1,6 +1,13 @@
++---
++title: "Week 3 — Flow Control"
++source: "Study notes based on Kirk Byers, Learning Python for Network Engineers (Lesson 3)"
++status: needs-review
++---
++
+ # Learning Python for Network Engineers — Week 3 Study Guide (Lesson 3)
+-**Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / Lesson 3)
+-**Target Audience:** Network engineers moving into network automation
++**Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / Lesson 3)  
++**Target Audience:** Network engineers moving into network automation  
++**Language Level:** English (B1/B2 Intermediate)
+ 
+ ---
+ 
+diff --git a/README.md b/README.md
+index b9eb753..09ef181 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1,78 @@
+-# python-4-ntwrkngnrs
+\ No newline at end of file
++# python-4-ntwrkngnrs
++
++Python for network engineers: study notes, exercises and small labs collected while moving from CLI-driven operations to network automation.
++
++The goal of this repository is to **gather everything in one place first** and later **merge it into a single study-and-review guide**. Until then, each piece keeps a record of where it came from (`source`) and how finished it is (`status`).
++
++## Repository map
++
++```text
++.
++├── 01-fundamentals-and-syntax/     guide.md   (Week 1)
++├── 02-data-types-files-and-lists/  guide.md   (Week 2)
++├── 03-flow-control/                guide.md   (Week 3)
++└── labs/
++    ├── how-network-devices-behave/ hub, ARP cache, switch and router in Python
++    └── leonardo-furtado/           packets-and-Python exercises
++```
++
++One topic per numbered folder. Hands-on material that is tied to a specific author lives in `labs/`, grouped by source.
++
++## Learning path
++
++| # | Guide | Topics | Status |
++| :-: | :--- | :--- | :-: |
++| 01 | [Fundamentals and syntax](01-fundamentals-and-syntax/guide.md) | `venv` and `pip`, IPython REPL, PEP 8 and naming, `input`/`print`, running scripts (shebang, `chmod`) | needs review |
++| 02 | [Data types, files and lists](02-data-types-files-and-lists/guide.md) | numbers, booleans and `None`, files and `with`, lists, mutable vs. immutable, shallow vs. deep copy, tuples | needs review |
++| 03 | [Flow control](03-flow-control/guide.md) | `if`/`elif`/`else`, `for`, `while`, `break`/`continue`, list comprehensions, generator expressions | needs review |
++
++Each guide follows the same pattern: network analogy → concept → hands-on exercises with solutions → cheat sheet.
++
++**Not covered yet:** dictionaries, sets, functions, classes and modules. The labs already use them (see below), so expect the next guides to start there.
++
++## Labs
++
++| Lab | Description | Prerequisites |
++| :--- | :--- | :--- |
++| [`labs/how-network-devices-behave`](labs/how-network-devices-behave/) | Simulates an Ethernet hub, an ARP cache, a MAC-learning switch and an IP router with longest-prefix match | Guides 01–03 plus dicts, functions and classes |
++| [`labs/leonardo-furtado`](labs/leonardo-furtado/) | Basic scripts and a small OOP inventory manager | Guide 01 (scripts 01–02); classes (script 05) |
++
++See [`labs/README.md`](labs/README.md) for details.
++
++## Sources and attribution
++
++| Material | Source | Notes |
++| :--- | :--- | :--- |
++| Guides 01–03 | Kirk Byers, *Learning Python for Network Engineers* ([twin-bridges/learning_python](https://github.com/twin-bridges/learning_python)) | Personal study notes written while following the course |
++| `labs/leonardo-furtado/` | Leonardo Furtado | Exercises collected from his material; add the exact link |
++| `labs/how-network-devices-behave/` | **Origin to be documented** | Add the author or course link |
++
++Before publishing or redistributing any of this material, check the license of each original source. The MIT license in this repository covers only the original work in it.
++
++## Setup
++
++Python 3.10 or newer is required (the refactored inventory manager uses `match`/`case`).
++
++```bash
++python3 -m venv netauto_venv
++source netauto_venv/bin/activate      # Windows: netauto_venv\Scripts\activate
++python -m pip install --upgrade pip
++```
++
++The [Week 1 guide](01-fundamentals-and-syntax/guide.md) explains what a virtual environment is (spoiler: it is a VRF for your Python packages) and how to use IPython for quick experiments.
++
++## Adding new material
++
++Start every Markdown file with this header so the sources stay traceable when everything is merged later:
++
++```yaml
++---
++title: "Short title"
++source: "Who or what this is based on"
++status: draft | needs-review | reviewed
++---
++```
++
++## License
++
++[MIT](LICENSE)
+diff --git a/labs/README.md b/labs/README.md
+new file mode 100644
+index 0000000..174bc51
+--- /dev/null
++++ b/labs/README.md
+@@ -0,0 +1,10 @@
++# Labs
++
++Hands-on material that goes beyond the written guides. Labs are grouped **by source**, so it stays clear where each exercise comes from.
++
++| Lab | What it is | Level | Needs (from the guides) |
++| :--- | :--- | :--- | :--- |
++| [`how-network-devices-behave/`](how-network-devices-behave/) | Four small programs that simulate an Ethernet hub, an ARP cache, an Ethernet switch and an IP router | Intermediate | Guides 01–03, plus dictionaries, functions and classes (not covered in the guides yet) |
++| [`leonardo-furtado/`](leonardo-furtado/) | Packets-and-Python exercises, from basic variables to a small OOP inventory manager | Beginner → Intermediate | Guide 01 for scripts `01` and `02`; classes and `match/case` for `05` |
++
++> **Tip:** do the labs in the order listed inside each folder. They are numbered on purpose.
+diff --git a/00-how-network-devices-behave/scripts/01-ethernet-hub/ethernet_hub.py b/labs/how-network-devices-behave/01-ethernet-hub/ethernet_hub.py
+similarity index 80%
+rename from 00-how-network-devices-behave/scripts/01-ethernet-hub/ethernet_hub.py
+rename to labs/how-network-devices-behave/01-ethernet-hub/ethernet_hub.py
+index cbaf7bd..802ef8a 100644
+--- a/00-how-network-devices-behave/scripts/01-ethernet-hub/ethernet_hub.py
++++ b/labs/how-network-devices-behave/01-ethernet-hub/ethernet_hub.py
+@@ -16,13 +16,17 @@ print(hubports[2])
+ print(hubports[3])
+ while True:
+     port = input("Generate signal into port: ")
+-    port_number = int(port)
++    try:
++        port_number = int(port)
++    except ValueError:
++        # Non-numeric input (e.g. "abc" or an empty line) is also invalid
++        port_number = -1
+     if port_number < len(hubports) and port_number >= 0:
+         ingress_port = hubports[port_number]
+         print("⚡️ Receiving signal on " + ingress_port)
+     else:
+         print("❌ Invalid entry: " + port)
+-        exit()
++        break
+ 
+     for egress_port in hubports:
+         if egress_port == ingress_port:
+diff --git a/00-how-network-devices-behave/scripts/02-arp-cache/arp_cache.py b/labs/how-network-devices-behave/02-arp-cache/arp_cache.py
+similarity index 100%
+rename from 00-how-network-devices-behave/scripts/02-arp-cache/arp_cache.py
+rename to labs/how-network-devices-behave/02-arp-cache/arp_cache.py
+diff --git a/00-how-network-devices-behave/scripts/03-ethernet-switch/ethernet_switch.py b/labs/how-network-devices-behave/03-ethernet-switch/ethernet_switch.py
+similarity index 100%
+rename from 00-how-network-devices-behave/scripts/03-ethernet-switch/ethernet_switch.py
+rename to labs/how-network-devices-behave/03-ethernet-switch/ethernet_switch.py
+diff --git a/00-how-network-devices-behave/scripts/04-ip-router/ip_router.py b/labs/how-network-devices-behave/04-ip-router/ip_router.py
+similarity index 81%
+rename from 00-how-network-devices-behave/scripts/04-ip-router/ip_router.py
+rename to labs/how-network-devices-behave/04-ip-router/ip_router.py
+index 60bec0c..3cf280e 100644
+--- a/00-how-network-devices-behave/scripts/04-ip-router/ip_router.py
++++ b/labs/how-network-devices-behave/04-ip-router/ip_router.py
+@@ -1,11 +1,13 @@
+ import ipaddress
+ 
+ class Router:
+-    RIB = []
+-    FIB = []
+-
+     def __init__(self, hostname):
+         self.hostname = hostname
++        # Instance attributes: each router gets its own routing tables.
++        # (As class attributes, every Router would share the same mutable
++        # lists - the aliasing trap from the Week 2 guide.)
++        self.RIB = []
++        self.FIB = []
+         print(f"Router {self.hostname} is booting...")
+ 
+     def add_route(self, network, prefix_length, next_hop):
+@@ -78,10 +80,19 @@ if __name__ == "__main__":
+     corerouter.show_ip_route()
+ 
+     while True:
+-        destination = input("Send packet to IP address: ")
++        try:
++            destination = input("Send packet to IP address (or 'quit'): ").strip()
++        except (EOFError, KeyboardInterrupt):
++            print()
++            break
++
++        if destination.lower() in ("q", "quit", "exit"):
++            break
+ 
+         try:
+             ipaddress.IPv4Address(destination)
+-            corerouter.incoming_packet(destination)
+-        except:
+-            print("Invalid IPv4 address")
+\ No newline at end of file
++        except ValueError:
++            print("Invalid IPv4 address")
++            continue
++
++        corerouter.incoming_packet(destination)
+\ No newline at end of file
+diff --git a/labs/how-network-devices-behave/04-ip-router/test_destinations.txt b/labs/how-network-devices-behave/04-ip-router/test_destinations.txt
+new file mode 100644
+index 0000000..db3561e
+--- /dev/null
++++ b/labs/how-network-devices-behave/04-ip-router/test_destinations.txt
+@@ -0,0 +1,80 @@
++105.174.217.143
++183.253.100.209
++126.247.137.71
++200.159.145.125
++75.34.211.9
++141.160.54.92
++167.249.220.193
++118.23.109.149
++165.82.56.121
++97.174.14.44
++2.240.107.145
++13.121.67.6
++94.191.2.32
++64.92.172.237
++129.220.67.198
++56.20.137.28
++192.57.135.17
++84.100.145.219
++175.122.188.251
++29.83.67.76
++118.210.73.157
++126.92.46.236
++87.21.189.112
++135.116.9.170
++75.86.112.71
++22.238.25.116
++174.132.146.24
++29.128.162.215
++87.125.214.90
++241.67.38.48
++218.5.76.246
++184.129.57.186
++145.191.89.117
++109.72.138.104
++193.139.109.110
++226.129.126.254
++116.27.170.46
++196.194.226.228
++51.7.136.177
++76.181.245.79
++68.151.160.27
++89.142.119.12
++81.48.208.194
++207.194.159.231
++26.23.78.132
++32.185.121.202
++248.152.151.186
++182.227.92.171
++102.191.43.134
++121.15.148.109
++118.10.63.243
++100.32.91.20
++216.26.233.94
++102.146.205.104
++174.39.13.168
++94.129.129.250
++136.218.114.9
++95.32.134.180
++59.240.25.49
++46.248.94.250
++156.204.237.157
++183.194.57.203
++165.28.24.145
++221.207.189.29
++164.22.18.148
++28.142.174.234
++40.4.153.109
++200.165.220.31
++75.10.96.134
++137.118.227.53
++167.117.119.80
++11.254.189.136
++68.78.167.201
++170.152.194.71
++220.92.14.238
++160.225.97.108
++153.224.196.231
++161.176.216.230
++59.240.83.169
++99.84.236.18
+diff --git a/00-how-network-devices-behave/scripts/04-ip-router/test_router.py b/labs/how-network-devices-behave/04-ip-router/test_router.py
+similarity index 54%
+rename from 00-how-network-devices-behave/scripts/04-ip-router/test_router.py
+rename to labs/how-network-devices-behave/04-ip-router/test_router.py
+index 57ace9e..dd18f4c 100644
+--- a/00-how-network-devices-behave/scripts/04-ip-router/test_router.py
++++ b/labs/how-network-devices-behave/04-ip-router/test_router.py
+@@ -1,15 +1,21 @@
+-import ip_router as ip_router
+ import json
+ from datetime import datetime
++from pathlib import Path
++
++import ip_router
++
++# Resolve data files next to this script, so it works from any directory
++HERE = Path(__file__).resolve().parent
+ 
+ border_router = ip_router.Router("border-router-1")
+ 
+-with open("test_routing_table.json") as f:
++with open(HERE / "test_routing_table.json") as f:
+     border_router.RIB = json.load(f)
+     border_router.calculate_fib()
+ 
+-with open("test_destinations.txt") as f:
+-    destinations = f.read().split("\n")
++with open(HERE / "test_destinations.txt") as f:
++    # splitlines() + filter: a trailing newline must not become an empty "IP"
++    destinations = [line.strip() for line in f.read().splitlines() if line.strip()]
+ 
+ t1 = datetime.now()
+ 
+@@ -22,4 +28,4 @@ duration = t2 - t1
+ number_of_packets = len(destinations)
+ duration_per_packet = duration.total_seconds() / number_of_packets
+ packets_per_second = 1 / duration_per_packet
+-print(f"{border_router.hostname} packets per second: {int(packets_per_second)}")
+\ No newline at end of file
++print(f"{border_router.hostname} packets per second: {int(packets_per_second)}")
+diff --git a/00-how-network-devices-behave/scripts/04-ip-router/testing_routing_table.json b/labs/how-network-devices-behave/04-ip-router/test_routing_table.json
+similarity index 100%
+rename from 00-how-network-devices-behave/scripts/04-ip-router/testing_routing_table.json
+rename to labs/how-network-devices-behave/04-ip-router/test_routing_table.json
+diff --git a/labs/how-network-devices-behave/README.md b/labs/how-network-devices-behave/README.md
+new file mode 100644
+index 0000000..1b8288b
+--- /dev/null
++++ b/labs/how-network-devices-behave/README.md
+@@ -0,0 +1,46 @@
++# Lab: How Network Devices Behave
++
++As network engineers we spend years on the CLI of routers and switches. Writing the *behaviour* of those devices in Python is a good way to learn both at the same time: each script is a tiny, runnable model of a real device.
++
++> **Source:** origin of these scripts is not documented yet. Add the author/course link here before sharing the repository widely.
++
++## Scripts
++
++| # | Script | What it models | Python concepts used |
++| :-: | :--- | :--- | :--- |
++| 01 | [`ethernet_hub.py`](01-ethernet-hub/ethernet_hub.py) | A hub: a signal received on one port is repeated on **every other** port | `list`, `while True`, `input()`, `int()`, `if`/`else`, `for`, `try`/`except` |
++| 02 | [`arp_cache.py`](02-arp-cache/arp_cache.py) | An ARP table lookup (`show ip arp`), with an *Incomplete* entry on a miss | `dict`, `.get()`, truthiness, f-strings, `.items()` |
++| 03 | [`ethernet_switch.py`](03-ethernet-switch/ethernet_switch.py) | A switch: MAC learning, known-unicast forwarding, flooding for unknown/broadcast, interface counters (`show mac address-table`, `show interfaces`) | nested `dict`, functions, `+=`, `sorted()`, string slicing |
++| 04 | [`ip_router.py`](04-ip-router/ip_router.py) | A router: RIB → FIB, **longest prefix match**, forward or drop (`show ip route`) | classes, `ipaddress`, `json`, `try`/`except` |
++
++Suggested order: 01 → 02 → 03 → 04. Each step adds one idea (flooding → address resolution → learning → routing).
++
++## How to run
++
++Activate your virtual environment first (see the [Week 1 guide](../../01-fundamentals-and-syntax/guide.md)), then:
++
++```bash
++cd labs/how-network-devices-behave
++
++python 01-ethernet-hub/ethernet_hub.py        # type a port number 0-3; anything else exits
++python 02-arp-cache/arp_cache.py              # try 172.16.0.31, then an unknown IP
++python 03-ethernet-switch/ethernet_switch.py  # replays 28 frames and prints both tables
++python 04-ip-router/ip_router.py              # type an IPv4 address; 'quit' exits
++```
++
++### Router benchmark (`test_router.py`)
++
++`test_router.py` loads 100 routes from `test_routing_table.json`, sends the 80 addresses in `test_destinations.txt` through the router and prints the packets-per-second rate. About a quarter of the destinations have no matching route, so you will see both *Forwarding* and *Dropping* in the output.
++
++```bash
++python 04-ip-router/test_router.py
++```
++
++The result depends on your machine, and printing every decision slows the router down. That is a good starting point for a discussion about why a real FIB is not a Python list scanned from start to finish.
++
++## Things worth noticing while you read the code
++
++- **Switch vs. hub:** the switch learns the *source* MAC on every frame and floods only when the destination is unknown or broadcast.
++- **RIB vs. FIB:** `add_route()` rebuilds the whole FIB every time. Fine for a lab, not for 900k BGP routes.
++- **Longest prefix match** in `find_next_hop_address()` is a linear scan that keeps the candidate with the largest `prefixlen`.
++- **Instance state:** `RIB` and `FIB` live on the instance (`self.RIB`). If they were class attributes, every `Router` would share the same lists, which is the mutable-aliasing trap from the [Week 2 guide](../../02-data-types-files-and-lists/guide.md).
+diff --git a/01-fundamentals-and-syntax/02-packets-and-python-leonardo-furtado/01-basic-monitoring-scenario.py b/labs/leonardo-furtado/01-basic-monitoring-scenario.py
+similarity index 100%
+rename from 01-fundamentals-and-syntax/02-packets-and-python-leonardo-furtado/01-basic-monitoring-scenario.py
+rename to labs/leonardo-furtado/01-basic-monitoring-scenario.py
+diff --git a/01-fundamentals-and-syntax/02-packets-and-python-leonardo-furtado/02-bandwidth-calculation-for-a-link.py b/labs/leonardo-furtado/02-bandwidth-calculation-for-a-link.py
+similarity index 100%
+rename from 01-fundamentals-and-syntax/02-packets-and-python-leonardo-furtado/02-bandwidth-calculation-for-a-link.py
+rename to labs/leonardo-furtado/02-bandwidth-calculation-for-a-link.py
+diff --git a/01-fundamentals-and-syntax/02-packets-and-python-leonardo-furtado/05-think-like-a-programmer/network-inventory-manager-refactored.py b/labs/leonardo-furtado/05-think-like-a-programmer/network-inventory-manager-refactored.py
+similarity index 100%
+rename from 01-fundamentals-and-syntax/02-packets-and-python-leonardo-furtado/05-think-like-a-programmer/network-inventory-manager-refactored.py
+rename to labs/leonardo-furtado/05-think-like-a-programmer/network-inventory-manager-refactored.py
+diff --git a/01-fundamentals-and-syntax/02-packets-and-python-leonardo-furtado/05-think-like-a-programmer/network-inventory-manager.py b/labs/leonardo-furtado/05-think-like-a-programmer/network-inventory-manager.py
+similarity index 100%
+rename from 01-fundamentals-and-syntax/02-packets-and-python-leonardo-furtado/05-think-like-a-programmer/network-inventory-manager.py
+rename to labs/leonardo-furtado/05-think-like-a-programmer/network-inventory-manager.py
+diff --git a/labs/leonardo-furtado/README.md b/labs/leonardo-furtado/README.md
+new file mode 100644
+index 0000000..4d17ef7
+--- /dev/null
++++ b/labs/leonardo-furtado/README.md
+@@ -0,0 +1,29 @@
++# Lab: Packets and Python (Leonardo Furtado)
++
++> **Source:** exercises from Leonardo Furtado's material (kept from the original folder name `02-packets-and-python-leonardo-furtado`). Add the link to the exact course or repository here.
++
++The numbering below is the original one. Items `03` and `04` are not in this repository.
++
++| # | File | What it practises | Level |
++| :-: | :--- | :--- | :--- |
++| 01 | [`01-basic-monitoring-scenario.py`](01-basic-monitoring-scenario.py) | Variables, arithmetic, `str()` conversion and string concatenation | Guide 01 |
++| 02 | [`02-bandwidth-calculation-for-a-link.py`](02-bandwidth-calculation-for-a-link.py) | Integer maths (speed × channels) and building output strings | Guide 01 |
++| 05 | [`05-think-like-a-programmer/network-inventory-manager.py`](05-think-like-a-programmer/network-inventory-manager.py) | First version: classes (`NetworkDevice`, `InventoryManager`), a menu loop, list comprehension | Classes needed |
++| 05 | [`05-think-like-a-programmer/network-inventory-manager-refactored.py`](05-think-like-a-programmer/network-inventory-manager-refactored.py) | Same program refactored: logic moved into `update_device_status()`, a `main()` function, `match`/`case`, `if __name__ == "__main__"` | Classes needed, **Python 3.10+** |
++
++## Reading the two inventory managers side by side
++
++Compare them after you have written your own version. The refactoring changes *structure*, not behaviour:
++
++- the update logic leaves the menu loop and becomes a method that returns `True`/`False`;
++- the main program is wrapped in `main()` so the file can be imported without running;
++- the `if / elif / else` chain becomes `match` / `case`.
++
++## Run
++
++```bash
++cd labs/leonardo-furtado
++python 01-basic-monitoring-scenario.py
++python 02-bandwidth-calculation-for-a-link.py
++python 05-think-like-a-programmer/network-inventory-manager-refactored.py
++```

@@ -16,13 +16,17 @@ print(hubports[2])
 print(hubports[3])
 while True:
     port = input("Generate signal into port: ")
-    port_number = int(port)
+    try:
+        port_number = int(port)
+    except ValueError:
+        # Non-numeric input (e.g. "abc" or an empty line) is also invalid
+        port_number = -1
     if port_number < len(hubports) and port_number >= 0:
         ingress_port = hubports[port_number]
         print("⚡️ Receiving signal on " + ingress_port)
     else:
         print("❌ Invalid entry: " + port)
-        exit()
+        break
 
     for egress_port in hubports:
         if egress_port == ingress_port:

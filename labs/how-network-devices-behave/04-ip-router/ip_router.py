@@ -1,11 +1,13 @@
 import ipaddress
 
 class Router:
-    RIB = []
-    FIB = []
-
     def __init__(self, hostname):
         self.hostname = hostname
+        # Instance attributes: each router gets its own routing tables.
+        # (As class attributes, every Router would share the same mutable
+        # lists - the aliasing trap from the Week 2 guide.)
+        self.RIB = []
+        self.FIB = []
         print(f"Router {self.hostname} is booting...")
 
     def add_route(self, network, prefix_length, next_hop):
@@ -78,10 +80,19 @@ if __name__ == "__main__":
     corerouter.show_ip_route()
 
     while True:
-        destination = input("Send packet to IP address: ")
+        try:
+            destination = input("Send packet to IP address (or 'quit'): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            break
+
+        if destination.lower() in ("q", "quit", "exit"):
+            break
 
         try:
             ipaddress.IPv4Address(destination)
-            corerouter.incoming_packet(destination)
-        except:
+        except ValueError:
             print("Invalid IPv4 address")
+            continue
+
+        corerouter.incoming_packet(destination)

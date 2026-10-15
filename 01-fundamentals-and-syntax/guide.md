@@ -1,3 +1,9 @@
+---
+title: "Week 1 — Fundamentals and Syntax"
+source: "Study notes based on Kirk Byers, Learning Python for Network Engineers (Lesson 1)"
+status: needs-review
+---
+
 # Learning Python for Network Engineers — Week 1 Study Guide
 
 **Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / [twin-bridges/learning_python](https://github.com/twin-bridges/learning_python))  

@@ -1,6 +1,13 @@
+---
+title: "Week 3 — Flow Control"
+source: "Study notes based on Kirk Byers, Learning Python for Network Engineers (Lesson 3)"
+status: needs-review
+---
+
 # Learning Python for Network Engineers — Week 3 Study Guide (Lesson 3)
-**Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / Lesson 3)
-**Target Audience:** Network engineers moving into network automation
+**Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / Lesson 3)  
+**Target Audience:** Network engineers moving into network automation  
+**Language Level:** English (B1/B2 Intermediate)
 
 ---
 

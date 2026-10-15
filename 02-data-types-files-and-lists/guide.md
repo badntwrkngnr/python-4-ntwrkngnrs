@@ -1,3 +1,9 @@
+---
+title: "Week 2 — Data Types, Files and Lists"
+source: "Study notes based on Kirk Byers, Learning Python for Network Engineers (Lesson 2)"
+status: needs-review
+---
+
 # Learning Python for Network Engineers — Week 2 Study Guide
 **Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / Lesson 2)  
 **Target Audience:** Network Engineers transitioning to Network Automation  
@@ -348,7 +354,7 @@ print(data)
 #### Why You Should Always Use Context Managers:
 1. **Automatic Closing & Flushing:** The moment your code leaves the 4-space indented block, Python automatically calls `f.flush()` (if writing/appending) and `f.close()`.
 2. **Guaranteed Cleanup During Crashes (Exceptions):**  
-   Imagine your script opens a file (or an SSH session to a Cisco router) without a context manager, and an unexpected error crashes your script on the next line. The `f.close()` line is never reached, leaving unushed files or hung VTY/SSH sessions!  
+   Imagine your script opens a file (or an SSH session to a Cisco router) without a context manager, and an unexpected error crashes your script on the next line. The `f.close()` line is never reached, leaving unflushed files or hung VTY/SSH sessions!  
    **With a Context Manager, cleanup ALWAYS happens.** Even if an unhandled exception crashes your code inside the `with` block, Python guarantees that the file is gracefully flushed and closed before the program exits.
 
 ---
