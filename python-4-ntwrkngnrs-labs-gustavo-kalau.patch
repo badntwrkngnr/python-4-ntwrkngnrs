@@ -1,0 +1,385 @@
+diff --git a/README.md b/README.md
+index 09ef181..0f17ba9 100644
+--- a/README.md
++++ b/README.md
+@@ -13,7 +13,8 @@ The goal of this repository is to **gather everything in one place first** and l
+ ├── 03-flow-control/                guide.md   (Week 3)
+ └── labs/
+     ├── how-network-devices-behave/ hub, ARP cache, switch and router in Python
+-    └── leonardo-furtado/           packets-and-Python exercises
++    ├── leonardo-furtado/           packets-and-Python exercises
++    └── gustavo-kalau/              "Do CLI ao Código": containerlab labs + Netmiko
+ ```
+ 
+ One topic per numbered folder. Hands-on material that is tied to a specific author lives in `labs/`, grouped by source.
+@@ -36,6 +37,7 @@ Each guide follows the same pattern: network analogy → concept → hands-on ex
+ | :--- | :--- | :--- |
+ | [`labs/how-network-devices-behave`](labs/how-network-devices-behave/) | Simulates an Ethernet hub, an ARP cache, a MAC-learning switch and an IP router with longest-prefix match | Guides 01–03 plus dicts, functions and classes |
+ | [`labs/leonardo-furtado`](labs/leonardo-furtado/) | Basic scripts and a small OOP inventory manager | Guide 01 (scripts 01–02); classes (script 05) |
++| [`labs/gustavo-kalau`](labs/gustavo-kalau/) | Containerlab topologies plus Netmiko scripts from the *Do CLI ao Código* series | Guides 01–03 plus dicts and f-strings; Docker and containerlab |
+ 
+ See [`labs/README.md`](labs/README.md) for details.
+ 
+@@ -45,6 +47,7 @@ See [`labs/README.md`](labs/README.md) for details.
+ | :--- | :--- | :--- |
+ | Guides 01–03 | Kirk Byers, *Learning Python for Network Engineers* ([twin-bridges/learning_python](https://github.com/twin-bridges/learning_python)) | Personal study notes written while following the course |
+ | `labs/leonardo-furtado/` | Leonardo Furtado | Exercises collected from his material; add the exact link |
++| `labs/gustavo-kalau/` | Gustavo Kalau, [*Do CLI ao Código*](https://gustavokalau.com.br/do-cli-ao-codigo/) | My own practice code written while following the series; the original material belongs to the author |
+ | `labs/how-network-devices-behave/` | **Origin to be documented** | Add the author or course link |
+ 
+ Before publishing or redistributing any of this material, check the license of each original source. The MIT license in this repository covers only the original work in it.
+diff --git a/labs/README.md b/labs/README.md
+index 174bc51..49ccbd2 100644
+--- a/labs/README.md
++++ b/labs/README.md
+@@ -6,5 +6,6 @@ Hands-on material that goes beyond the written guides. Labs are grouped **by sou
+ | :--- | :--- | :--- | :--- |
+ | [`how-network-devices-behave/`](how-network-devices-behave/) | Four small programs that simulate an Ethernet hub, an ARP cache, an Ethernet switch and an IP router | Intermediate | Guides 01–03, plus dictionaries, functions and classes (not covered in the guides yet) |
+ | [`leonardo-furtado/`](leonardo-furtado/) | Packets-and-Python exercises, from basic variables to a small OOP inventory manager | Beginner → Intermediate | Guide 01 for scripts `01` and `02`; classes and `match/case` for `05` |
++| [`gustavo-kalau/`](gustavo-kalau/) | *Do CLI ao Código* series: containerlab topologies plus Netmiko scripts that configure them | Beginner → Intermediate | Guides 01–03, plus dictionaries and f-strings (not covered in the guides yet); Docker and containerlab |
+ 
+ > **Tip:** do the labs in the order listed inside each folder. They are numbered on purpose.
+diff --git a/labs/gustavo-kalau/README.md b/labs/gustavo-kalau/README.md
+new file mode 100644
+index 0000000..325a12d
+--- /dev/null
++++ b/labs/gustavo-kalau/README.md
+@@ -0,0 +1,73 @@
++# Lab: Do CLI ao Código (Gustavo Kalau)
++
++> **Source:** practice code written while following the series [**Do CLI ao Código**](https://gustavokalau.com.br/do-cli-ao-codigo/) by Gustavo Kalau. Credit for the concepts, structure and teaching approach belongs to the author. This folder holds only my own practice code and notes; for the original content, follow the series.
++
++The series goes from the command line to the first Python scripts for network automation. Each lab here pairs a [containerlab](https://containerlab.dev/) topology with the code that automates it.
++
++| Lab | Topology | Code | Status |
++| :--- | :--- | :--- | :--- |
++| [`lab01`](lab01/) | 2 Arista cEOS switches + 2 Linux hosts, trunk between the switches | [`config_vlan.py`](lab01/config_vlan.py) — Netmiko pushes a VLAN and port config | Done |
++| [`lab02`](lab02/) | `cisco-lab`: 2 Cisco IOL routers, 2 Cisco IOL L2 switches, 2 Linux hosts in different subnets | none yet | Topology only |
++
++## Lab 01 — VLAN configuration with Netmiko
++
++```text
++pc1 ── sw1 ══ sw2 ── pc2
++        trunk
++```
++
++| Link | Purpose |
++| :--- | :--- |
++| `sw1:eth1` ↔ `sw2:eth1` | trunk between the switches |
++| `pc1:eth1` ↔ `sw1:eth2` | host 1 (`192.168.10.11/24`) |
++| `pc2:eth1` ↔ `sw2:eth2` | host 2 (`192.168.10.12/24`) |
++
++`config_vlan.py` loops over `sw1` and `sw2`, connects with Netmiko (`arista_eos`), enters enable mode and sends one configuration set per switch:
++
++- creates VLAN 10 named `LAB`;
++- `Ethernet2`: access port in VLAN 10 (towards the host);
++- `Ethernet1`: trunk allowing VLAN 10 (towards the other switch).
++
++## Lab 02 — `cisco-lab` topology
++
++| Node | Kind | Role |
++| :--- | :--- | :--- |
++| `r1`, `r2` | Cisco IOL (L3) | routers, linked to each other (`r1:eth1` ↔ `r2:eth1`) |
++| `sw1`, `sw2` | Cisco IOL (L2) | access switches: `sw1:eth1` ↔ `r1:eth2` and `sw1:eth2` ↔ `pc1:eth1` (same pattern for `sw2`, `r2`, `pc2`) |
++| `pc1` | Linux | `192.168.0.13/24`, static route to `192.168.1.0/24` via `192.168.0.1` |
++| `pc2` | Linux | `192.168.1.13/24`, static route to `192.168.0.0/24` via `192.168.1.1` |
++
++Only the topology file exists so far; the automation code for this lab has not been written yet.
++
++## Prerequisites
++
++| You need | Where it comes from |
++| :--- | :--- |
++| Lists, `for` loops, variables, running scripts | [Guides 01–03](../../README.md#learning-path) |
++| Dictionaries, f-strings and `**` argument unpacking (used to build the Netmiko connection) | not covered in the guides yet |
++| Netmiko (see the [Week 1 guide](../../01-fundamentals-and-syntax/guide.md) for what it does) | `requirements.txt` in this folder |
++| Docker and containerlab | installed on the machine that runs the labs |
++| Router/switch images | **not included**: import the Arista cEOS image as `ceos:4.36.2.f` and build the Cisco IOL images locally (for example with [hellt/vrnetlab](https://github.com/hellt/vrnetlab)) |
++
++## How to run (lab 01)
++
++Activate your virtual environment first (see the [main README](../../README.md#setup)), then:
++
++```bash
++cd labs/gustavo-kalau
++python -m pip install -r requirements.txt
++
++sudo containerlab deploy -t lab01/lab01.clab.yml
++python lab01/config_vlan.py          # run it on the machine where the lab is deployed
++sudo containerlab destroy -t lab01/lab01.clab.yml
++```
++
++The script reaches the switches by node name (`sw1`, `sw2`). With `prefix: ""` in the topology, container names match node names.
++
++To check the result, run `show vlan` on the switches and `docker exec pc1 ping -c 3 192.168.10.12`.
++
++## Notes
++
++- **Credentials:** `config_vlan.py` keeps the lab credentials inline for simplicity. That is acceptable in a disposable lab and nowhere else; moving them to environment variables or SSH keys is the natural first refactor.
++- **`requirements.txt`** is a full `pip freeze` from the practice repository, so it includes transitive dependencies. It also lists `ntc_templates` and `textfsm` for parsing `show` output, which the scripts do not use yet.
++- **`*.annotations.json`** only store node positions for the containerlab VS Code extension. They can be ignored.
+diff --git a/labs/gustavo-kalau/lab01/config_vlan.py b/labs/gustavo-kalau/lab01/config_vlan.py
+new file mode 100644
+index 0000000..b40d7a8
+--- /dev/null
++++ b/labs/gustavo-kalau/lab01/config_vlan.py
+@@ -0,0 +1,29 @@
++from netmiko import ConnectHandler
++
++switches = ["sw1", "sw2"]
++
++comandos = [
++    "vlan 10",
++    "name LAB",
++    "interface Ethernet2",
++    "switchport mode access",
++    "switchport access vlan 10",
++    "interface Ethernet1",
++    "switchport mode trunk",
++    "switchport trunk allowed vlan 10",
++]
++
++for nome in switches:
++    device = {
++        "device_type": "arista_eos",
++        "host": nome,
++        "username": "admin",
++        "password": "admin",
++    }
++
++    print(f"--- conectando em {nome} ---")
++    conexao = ConnectHandler(**device)
++    conexao.enable()
++    saida = conexao.send_config_set(comandos)
++    print(saida)
++    conexao.disconnect()
+\ No newline at end of file
+diff --git a/labs/gustavo-kalau/lab01/lab01.clab.yml b/labs/gustavo-kalau/lab01/lab01.clab.yml
+new file mode 100644
+index 0000000..446afe6
+--- /dev/null
++++ b/labs/gustavo-kalau/lab01/lab01.clab.yml
+@@ -0,0 +1,29 @@
++name: lab01
++
++prefix: ""
++
++topology:
++  nodes:
++    sw1:
++      kind: arista_ceos
++      image: ceos:4.36.2.f
++    sw2:
++      kind: arista_ceos
++      image: ceos:4.36.2.f
++    pc1:
++      kind: linux
++      image: wbitt/network-multitool:alpine-extra
++      exec:
++        - ip link set eth1 up
++        - ip addr add 192.168.10.11/24 dev eth1
++    pc2:
++      kind: linux
++      image: wbitt/network-multitool:alpine-extra
++      exec:
++        - ip link set eth1 up
++        - ip addr add 192.168.10.12/24 dev eth1
++
++  links:
++    - endpoints: [ "sw1:eth1", "sw2:eth1" ] # trunk entre os switches
++    - endpoints: [ "pc1:eth1", "sw1:eth2" ] # host 1 no switch 1
++    - endpoints: [ "pc2:eth1", "sw2:eth2" ] # host 2 no switch 2
+diff --git a/labs/gustavo-kalau/lab01/lab01.clab.yml.annotations.json b/labs/gustavo-kalau/lab01/lab01.clab.yml.annotations.json
+new file mode 100644
+index 0000000..600f81b
+--- /dev/null
++++ b/labs/gustavo-kalau/lab01/lab01.clab.yml.annotations.json
+@@ -0,0 +1,42 @@
++{
++  "freeTextAnnotations": [],
++  "freeShapeAnnotations": [],
++  "trafficRateAnnotations": [],
++  "groupStyleAnnotations": [],
++  "networkNodeAnnotations": [],
++  "nodeAnnotations": [
++    {
++      "id": "sw1",
++      "position": {
++        "x": 260,
++        "y": 260
++      }
++    },
++    {
++      "id": "sw2",
++      "position": {
++        "x": 500,
++        "y": 260
++      }
++    },
++    {
++      "id": "pc1",
++      "position": {
++        "x": 260,
++        "y": 440
++      },
++      "icon": "client"
++    },
++    {
++      "id": "pc2",
++      "position": {
++        "x": 500,
++        "y": 440
++      },
++      "icon": "client"
++    }
++  ],
++  "edgeAnnotations": [],
++  "aliasEndpointAnnotations": [],
++  "viewerSettings": {}
++}
+\ No newline at end of file
+diff --git a/labs/gustavo-kalau/lab02/ciscolab.clab.yml b/labs/gustavo-kalau/lab02/ciscolab.clab.yml
+new file mode 100644
+index 0000000..0471a56
+--- /dev/null
++++ b/labs/gustavo-kalau/lab02/ciscolab.clab.yml
+@@ -0,0 +1,40 @@
++name: cisco-lab
++
++prefix: ""
++
++topology:
++  nodes:
++    r1:
++      kind: cisco_iol
++      image: vrnetlab/cisco_iol:17.18.02
++    r2:
++      kind: cisco_iol
++      image: vrnetlab/cisco_iol:17.18.02
++    sw1:
++      kind: cisco_iol
++      image: vrnetlab/cisco_iol:l2-17.18.02
++      type: l2
++    sw2:
++      kind: cisco_iol
++      image: vrnetlab/cisco_iol:l2-17.18.02
++      type: l2
++    pc1:
++      kind: linux
++      image: wbitt/network-multitool:alpine-extra
++      exec:
++        - ip link set eth1 up
++        - ip addr add 192.168.0.13/24 dev eth1
++        - ip route add 192.168.1.0/24 via 192.168.0.1 dev eth1
++    pc2:
++      kind: linux
++      image: wbitt/network-multitool:alpine-extra
++      exec:
++        - ip link set eth1 up
++        - ip addr add 192.168.1.13/24 dev eth1
++        - ip route add 192.168.0.0/24 via 192.168.1.1 dev eth1
++  links:
++    - endpoints: [ "r1:eth1", "r2:eth1" ]
++    - endpoints: [ "sw1:eth1", "r1:eth2" ]
++    - endpoints: [ "sw1:eth2", "pc1:eth1" ]
++    - endpoints: [ "sw2:eth1", "r2:eth2" ]
++    - endpoints: [ "sw2:eth2", "pc2:eth1" ]
+diff --git a/labs/gustavo-kalau/lab02/ciscolab.clab.yml.annotations.json b/labs/gustavo-kalau/lab02/ciscolab.clab.yml.annotations.json
+new file mode 100644
+index 0000000..1a4b73c
+--- /dev/null
++++ b/labs/gustavo-kalau/lab02/ciscolab.clab.yml.annotations.json
+@@ -0,0 +1,69 @@
++{
++  "freeTextAnnotations": [],
++  "freeShapeAnnotations": [],
++  "trafficRateAnnotations": [],
++  "groupStyleAnnotations": [],
++  "networkNodeAnnotations": [],
++  "nodeAnnotations": [
++    {
++      "id": "r1",
++      "position": {
++        "x": 20,
++        "y": 40
++      },
++      "interfacePattern": "e0/{n}"
++    },
++    {
++      "id": "sw1",
++      "position": {
++        "x": 20,
++        "y": 180
++      },
++      "interfacePattern": "e0/{n}",
++      "icon": "switch"
++    },
++    {
++      "id": "r2",
++      "position": {
++        "x": 320,
++        "y": 40
++      },
++      "interfacePattern": "e0/{n}"
++    },
++    {
++      "id": "fw1",
++      "position": {
++        "x": 540,
++        "y": 260
++      }
++    },
++    {
++      "id": "pc2",
++      "position": {
++        "x": 320,
++        "y": 320
++      },
++      "icon": "client"
++    },
++    {
++      "id": "pc1",
++      "position": {
++        "x": 20,
++        "y": 320
++      },
++      "icon": "client"
++    },
++    {
++      "id": "sw2",
++      "position": {
++        "x": 320,
++        "y": 180
++      },
++      "interfacePattern": "e0/{n}",
++      "icon": "switch"
++    }
++  ],
++  "edgeAnnotations": [],
++  "aliasEndpointAnnotations": [],
++  "viewerSettings": {}
++}
+\ No newline at end of file
+diff --git a/labs/gustavo-kalau/requirements.txt b/labs/gustavo-kalau/requirements.txt
+new file mode 100644
+index 0000000..d3536e4
+--- /dev/null
++++ b/labs/gustavo-kalau/requirements.txt
+@@ -0,0 +1,17 @@
++bcrypt==5.0.0
++cffi==2.1.1
++cryptography==50.0.1
++invoke==3.0.3
++markdown-it-py==4.2.0
++mdurl==0.1.2
++netmiko==4.8.0
++ntc_templates==9.3.0
++paramiko==5.0.0
++pycparser==3.0
++Pygments==2.21.0
++PyNaCl==1.6.2
++pyserial==3.5
++PyYAML==6.0.3
++rich==15.0.0
++scp==0.16.1
++textfsm==2.1.0

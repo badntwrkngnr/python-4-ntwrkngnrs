@@ -4,7 +4,6 @@ source: "Study notes based on Kirk Byers, Learning Python for Network Engineers 
 status: needs-review
 ---
 
-# Learning Python for Network Engineers — Week 2 Study Guide
 **Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / Lesson 2)  
 **Target Audience:** Network Engineers transitioning to Network Automation  
 **Language Level:** English (B1/B2 Intermediate)
@@ -13,9 +12,10 @@ status: needs-review
 
 ## 1. Introduction: Scaling Data and State in Network Automation
 
-In Week 1, you learned how to set up isolated virtual environments (`venv`), follow PEP 8 standards, and store simple text values in variables. However, when you treat the **network as a system**, a single string variable is not enough. 
+In Week 1, you learned how to set up isolated virtual environments (`venv`), follow PEP 8 standards, and store simple text values in variables. However, when you treat the **network as a system**, a single string variable is not enough.
 
 To automate real-world infrastructure, your scripts need to:
+
 - Calculate subnet sizes, interface counters, and link utilization (**Numbers: Integers & Floats**).
 - Make logical decisions based on whether a BGP peer is up or a configuration value is missing (**Booleans & `None`**).
 - Read CLI outputs (`show version`), save backup configurations, and record audit logs safely (**Files & Context Managers**).
@@ -44,7 +44,8 @@ print(type(optical_rx_dbm)) # Output: <class 'float'>
 ```
 
 ### Standard Math Operators (`+`, `-`, `*`, `/`)
-You can perform standard arithmetic with both integers and floats. 
+
+You can perform standard arithmetic with both integers and floats.
 
 > **CRITICAL RULE FOR DIVISION (`/`):**  
 > In Python 3, standard division using a single slash (`/`) **always returns a `float`**, even if the two numbers divide evenly!
@@ -66,11 +67,14 @@ print(type(links_per_core)) # Output: <class 'float'>
 ### Special Math Operators: Modulo (`%`) and Power (`**`)
 
 #### 1. The Modulo Operator (`%`)
+
 The **modulo operator (`%`)** divides two numbers and returns only the **remainder** of that division.
+
 - If `9 % 2` is evaluated: $2$ goes into $9$ four times ($2 \times 4 = 8$) with a remainder of $1$. So `9 % 2` returns `1`.
 - If `9 % 3` is evaluated: $3$ goes into $9$ evenly ($3 \times 3 = 9$) with a remainder of $0$. So `9 % 3` returns `0`.
 
 **Networking Use Case:** How do you automatically split 100 VLANs across two Core Switches (even VLANs on `Core-01`, odd VLANs on `Core-02`)? You check `vlan_id % 2`:
+
 - If `vlan_id % 2 == 0`, the VLAN is **even**.
 - If `vlan_id % 2 == 1`, the VLAN is **odd**.
 
@@ -81,9 +85,11 @@ print(remainder)  # Output: 1 (Odd VLAN -> assign to Core-02 as primary root)
 ```
 
 #### 2. Raising to a Power (`**`)
+
 The double-asterisk operator (`**`) raises a number to an exponent (for example, `2 ** 3` calculates $2^3 = 8$).
 
 **Networking Use Case:** Subnetting math! Every network engineer calculates host capacity using powers of $2$ ($2^{\text{host bits}}$):
+
 ```python
 # Calculate total IPv4 addresses in a /24 subnet (8 host bits)
 host_bits = 8
@@ -95,6 +101,7 @@ print("Usable hosts in /24:", usable_hosts) # Output: 254
 ```
 
 ### Rounding Floats with `round()`
+
 When calculating link bandwidth percentages or SLA latency averages, Python floats often produce long repeating decimals in memory. You can use the built-in `round(number, ndigits)` function to round a float to a specific number of decimal places.
 
 ```python
@@ -108,6 +115,7 @@ print(clean_latency)  # Output: 1.33
 ```
 
 ### Increment (`+=`) and Decrement (`-=`) Counters
+
 When your script loops through network devices, you often want a counter variable to keep track of how many interfaces are `UP` or how many login attempts remain.
 
 Instead of writing `i = i + 1`, Python provides a clean shorthand called `+=` (increment) and `-=` (decrement):
@@ -135,7 +143,9 @@ print("Retries remaining:", ssh_retries_left)
 ## 3. Booleans (`bool`) and the `None` Type
 
 ### Boolean Values (`True` and `False`)
+
 In Python, a Boolean (`bool`) represents a binary truth value: **`True`** or **`False`**.
+
 - **Syntax Rule:** You must capitalize the first letter (`True`, `False`) and **never** put quotes around them (`"True"` with quotes is a string, not a boolean!).
 
 ```python
@@ -146,6 +156,7 @@ print(type(interface_up))  # Output: <class 'bool'>
 ```
 
 ### Boolean Logic: `and`, `or`, `not`
+
 When building conditional checks (like `if` statements) to validate network state, you combine booleans using three logical operators:
 
 | Operator | Rule | Network Automation Example |
@@ -169,6 +180,7 @@ print(not bgp_established)          # Output: True
 ```
 
 ### "Truish" Values: Evaluating Non-Booleans in a Boolean Context
+
 In Python, you do not have to pass a strict `True` or `False` into an `if` statement. You can evaluate strings, integers, floats, or lists directly in a **Boolean context** (sometimes called *"truish"* or *truthy/falsy* behavior).
 
 How does Python decide if a string or a list is `True` or `False`?
@@ -205,6 +217,7 @@ print(bool(bgp_neighbors))         # Output: True (list is not empty)
 Instead of writing `if len(bgp_neighbors) > 0:`, you can simply write `if bgp_neighbors:` to check if your list of BGP neighbors contains data!
 
 ### The Special `None` Type (`NoneType`)
+
 Python has a special data type called **`None`** (written with a capital `N` and no quotes). It represents the **absence of a value** (similar to `null` in other languages or JSON).
 
 1. **Its Own Type:** `type(None)` returns `<class 'NoneType'>`. A `NoneType` variable can only ever hold one possible value: `None`.
@@ -227,12 +240,15 @@ In network automation, you constantly interact with files: reading saved CLI out
 *(First, let's look at how file operations work at a basic level, and in Section 5 we will upgrade to **Context Managers**, which is the best-practice way to handle files.)*
 
 ### Reading from a File (`mode="r"`)
+
 To open a file in your current working directory, use the built-in `open()` function. By default, `open()` opens the file in **read-only text mode (`mode="r"`)** and returns a **file handle** (commonly named `f`).
 
 There are four ways to read content from an open file handle:
 
 #### 1. `.read()` — Read the Entire File into One String
+
 Reads the whole file from start to finish and stores it in a single string (`str`) variable.
+
 ```python
 f = open("show_version.txt")  # Default mode is "r" (read text)
 data = f.read()               # Reads entire file into a single string
@@ -242,7 +258,9 @@ print(type(data))             # Output: <class 'str'>
 ```
 
 #### 2. `.readline()` and `.seek(0)` — Read One Line at a Time
+
 Every time you call `f.readline()`, Python reads the next line in the file and moves an internal cursor forward. If you ever need to reset the cursor back to the very beginning of the file without closing and reopening it, use `f.seek(0)`.
+
 ```python
 f = open("show_version.txt")
 first_line = f.readline()     # Reads line 1
@@ -253,7 +271,9 @@ f.close()
 ```
 
 #### 3. `.readlines()` — Read All Lines into a Python List
+
 Notice the **`s`** at the end of `.readlines()`. This method reads the entire file and returns a **list (`list`)**, where each element of the list is one line (`str`) from the file.
+
 ```python
 f = open("show_version.txt")
 lines_list = f.readlines()    # Returns a list of strings
@@ -264,7 +284,9 @@ print(len(lines_list))        # Output: 76 (file has 76 lines)
 ```
 
 #### 4. Looping Directly Over the File Handle (Memory-Efficient)
+
 Instead of loading the whole file into memory at once, you can iterate directly over the file variable `f` using a `for` loop:
+
 ```python
 f = open("show_version.txt")
 for line in f:
@@ -275,6 +297,7 @@ f.close()
 ---
 
 ### Writing to a File (`mode="w"`)
+
 To write data to a file, call `open()` with **`mode="w"`**.
 
 ```python
@@ -285,7 +308,8 @@ f.flush()  # Forces buffered data out to the OS disk immediately
 f.close()  # Closing also flushes and releases the file
 ```
 
-#### Important Rules When Writing Files (`mode="w"`):
+#### Important Rules When Writing Files (`mode="w"`)
+
 1. **Explicit Newlines (`\n`):** Unlike `print()`, the `.write()` method does **not** automatically add a line break at the end. You must include `\n` at the end of your string if you want a new line.
 2. **OS Caching and `.flush()`:** When you run `f.write()`, the operating system often caches (buffers) the data in RAM before writing it to the hard drive. If you inspect the file on disk before closing it, it might look empty (`0` bytes). Calling `f.flush()` or `f.close()` forces the operating system to write the cached data to the file system immediately.
 3. **`mode="w"` is DESTRUCTIVE!**  
@@ -294,6 +318,7 @@ f.close()  # Closing also flushes and releases the file
 ---
 
 ### Appending to a File (`mode="a"`)
+
 What if you want to add new log entries to the end of an existing file **without** destroying what is already inside? Use **`mode="a"`** (append mode).
 
 ```python
@@ -305,6 +330,7 @@ f.close()
 
 > **Architectural Tip from Kirk Byers:**  
 > When working with files in Python, stick to two patterns:
+>
 > 1. **Destructive Write (`mode="w"`):** Gather all the data you want in memory and completely write/replace the entire file.
 > 2. **Append (`mode="a"`):** Add new lines to the very end of the file.  
 > **Never try to insert or edit text in the middle of a file in place.** If you find yourself searching and updating records in the middle of a file repeatedly, you should use a lightweight database (like Python's built-in `sqlite3`) instead of a plain text file!
@@ -314,6 +340,7 @@ f.close()
 ## 5. Python Code Blocks & File Context Managers (`with`)
 
 ### An Aside on Python Code Blocks
+
 Before using Context Managers, you need to understand how Python structures **indented code blocks** (used in `with` statements, `if` conditionals, `for` loops, and functions):
 
 1. **The Colon Terminator (`:`):** Every block header line ends with a colon (`:`). The colon tells Python: *"An indented block of code is about to follow."*
@@ -335,7 +362,9 @@ print("Script complete")                  # 0 spaces ('if' block has ended)
 ---
 
 ### File Context Managers (`with open(...) as f:`)
+
 In software and network engineering, many operations follow the exact same 3-step lifecycle:
+
 1. **Open** a resource (a file, a database connection, a REST API session, or an SSH/Netmiko session to a router).
 2. **Perform operations** on that resource.
 3. **Close and clean up** the resource.
@@ -351,7 +380,8 @@ with open("show_version.txt", mode="r") as f:
 print(data)
 ```
 
-#### Why You Should Always Use Context Managers:
+#### Why You Should Always Use Context Managers
+
 1. **Automatic Closing & Flushing:** The moment your code leaves the 4-space indented block, Python automatically calls `f.flush()` (if writing/appending) and `f.close()`.
 2. **Guaranteed Cleanup During Crashes (Exceptions):**  
    Imagine your script opens a file (or an SSH session to a Cisco router) without a context manager, and an unexpected error crashes your script on the next line. The `f.close()` line is never reached, leaving unflushed files or hung VTY/SSH sessions!  
@@ -362,7 +392,9 @@ print(data)
 ## 6. Python Lists: Ordered Collections of Data
 
 ### List Basics
+
 A **List (`list`)** is an ordered, sequential collection of elements (similar to an *array* in other programming languages).
+
 - **Syntax:** Created using square brackets `[]` with commas separating each element.
 - **Mixed Data Types:** A list can hold any combination of data types (`str`, `int`, `float`, `bool`, `None`, or even other `list`s), although in network automation we usually group similar items together (like a list of VLANs or a list of router IP addresses).
 - **Zero-Based Indexing:** Just like interface `GigabitEthernet0/0` starts at `0`, Python lists start counting at **index `0`**.
@@ -391,14 +423,18 @@ print(routers)        # Output: ['br-spo-core-01', 'core-rtr-02', 'edge-fw-01', 
 ### Built-in Helpers: `len()`, `range()`, and Membership (`in`)
 
 #### 1. Checking List Length with `len()`
+
 Returns the total number of elements inside the list as an integer.
+
 ```python
 vlans = [10, 20, 30, 40, 50]
 print(len(vlans))  # Output: 5
 ```
 
 #### 2. Generating Number Sequences with `range()`
+
 The `range()` built-in generates a sequence of numbers dynamically:
+
 - `range(n)`: Starts at `0` by default and goes up to **$n - 1$** (the stopping number is **excluded**). Notice that `range(5)` generates `0, 1, 2, 3, 4`, which matches the exact indices of a 5-element list!
 - `range(start, stop)`: Starts at `start` (included) and stops at $\text{stop} - 1$ (`stop` is excluded).
 
@@ -413,6 +449,7 @@ print(switch_ports)  # Output: [1, 2, 3, 4]
 ```
 
 #### 3. List Membership Check (`in` Keyword)
+
 How do you check if a specific VLAN or IP address exists inside a list? Use the **`in`** keyword. It returns a Boolean (`True` or `False`).
 
 ```python
@@ -421,11 +458,13 @@ allowed_vlans = [10, 20, 30, 100, 200]
 print(100 in allowed_vlans)  # Output: True
 print(999 in allowed_vlans)  # Output: False
 ```
+
 *(Note: Lists can contain duplicate elements. The `in` check does not count how many times an item appears; it simply answers "Does this item exist anywhere in the list? Yes or No.")*
 
 ---
 
 ### Essential List Methods
+
 List methods are actions you call directly on a list object using dot notation (`my_list.method()`).
 
 ```python
@@ -464,11 +503,13 @@ dns_backup_copy = all_dns.copy()
 # 7. clear() - Empties the list (though reassigning `dns_servers = []` is clearer)
 dns_servers.clear()
 ```
+
 *(Python also includes methods like `.sort()` to sort elements and `.reverse()` to reverse the order of a list in place.)*
 
 ---
 
 ### List Slices (`my_list[start:stop]`)
+
 **List slicing** allows you to dynamically extract a subset of elements from a list to create a new list.
 
 - **Syntax:** `my_list[start:stop]`
@@ -502,9 +543,11 @@ print(interface_lines)
 ---
 
 ### Multidimensional Lists (Lists Within Lists)
+
 A list can contain other lists as its elements. In network automation, this happens frequently when you group devices by Data Center site or parse tabular CLI output into rows and columns.
 
 To access elements inside a multidimensional list, **chain your square bracket indices from left to right**:
+
 1. The first bracket `[i]` selects the element from the **outer list**.
 2. The second bracket `[j]` selects the element from the **inner list**.
 
@@ -529,10 +572,12 @@ print(network_matrix[1][1])    # Output: 'LA_DC2'
 
 ## 7. Under the Hood: Mutable vs. Immutable Objects & Copying
 
-*(Note: As Kirk Byers mentions, this section covers an intermediate topic. Understanding how Python handles memory will save you from painful bugs when manipulating device dictionaries and lists later on!)*
+(Note: As Kirk Byers mentions, this section covers an intermediate topic. Understanding how Python handles memory will save you from painful bugs when manipulating device dictionaries and lists later on!)
 
 ### Variable Names vs. Objects in Memory (`id()` and `is`)
+
 When you write `router1_addr = "10.1.1.1"`, Python does two separate things:
+
 1. It allocates space in your computer's **memory (RAM)** to store the string object `"10.1.1.1"`.
 2. It creates a **variable name (tag)** called `router1_addr` that **points** to that object in memory.
 
@@ -556,9 +601,11 @@ print(router1_addr is gw1)   # Output: True
 ---
 
 ### Immutable Objects (Cannot Be Changed in Memory)
+
 An **immutable object** is an object whose value in memory **can never be modified** after it is created.
 
 **Which Python types are Immutable?**
+
 - `None`
 - Booleans (`True`, `False`)
 - Integers (`int`) and Floats (`float`)
@@ -579,9 +626,11 @@ print(id(ssh_timeout))  # Different Memory ID! (e.g., 4300132)
 ---
 
 ### Mutable Objects (Can Be Modified in Place)
+
 A **mutable object** is an object whose contents **can be changed directly in memory** without creating a new object or changing its `id()`.
 
 **Which Python types are Mutable?**
+
 - **Lists (`list`)**
 - **Dictionaries (`dict`)** *(covered later)*
 - **Sets (`set`)** *(covered later)*
@@ -595,7 +644,8 @@ datacenters.append("dallas1")
 print(id(datacenters))       # Exact SAME Memory ID: 14055599900!
 ```
 
-#### The Mutable Aliasing Trap!
+#### The Mutable Aliasing Trap
+
 Because lists are mutable, look at what happens when you assign `my_dcs = datacenters` without copying:
 
 ```python
@@ -609,6 +659,7 @@ print(datacenters)            # Output: ['sf1', 'sf2', 'la1', 'london1'] -> ALSO
 ```
 
 To create two independent flat lists, use `.copy()` (which performs a **shallow copy**):
+
 ```python
 datacenters = ["sf1", "sf2", "la1"]
 my_dcs = datacenters.copy()   # Creates a new outer list in memory
@@ -621,13 +672,17 @@ print(datacenters)            # Output: ['sf1', 'sf2', 'la1'] (Unchanged!)
 ---
 
 ### Shallow Copy vs. Deep Copy (`copy.deepcopy()`)
+
 Internally, a Python list does not store objects directly inside a block of memory; it stores **pointers (references)** to those objects.
 
 #### 1. When a Shallow Copy (`.copy()`) is Fine
+
 If your list only contains **immutable** elements (like strings or integers: `["sf1", "sf2", "dallas"]`), a shallow copy (`dc_list = datacenters.copy()`) is completely safe. Even though both lists initially point to the same string objects in memory, strings are immutable—reassigning `dc_list[-1] = "denver"` simply points that slot to a new string without affecting `datacenters`.
 
 #### 2. When a Shallow Copy Fails (Nested Mutable Structures)
+
 What if you have a **list of lists** (a multidimensional list where the inner elements are **mutable**)?
+
 - **A Shallow Copy (`.copy()`) ONLY copies the outermost list container.**
 - The pointers inside the new outer list still point to the **exact same inner lists** in memory!
 
@@ -653,6 +708,7 @@ print(datacenters[0])  # Output: ['10.1.1.1', '10.1.1.2', '10.1.1.99'] -> BUG!
 ```
 
 #### 3. The Solution: Deep Copy (`copy.deepcopy()`)
+
 To copy a nested data structure (like a list of lists, or a list of dictionaries from a network API) so that **every level of mutable objects** gets its own independent copy in memory, import the built-in `copy` module and use **`copy.deepcopy()`**:
 
 ```python
@@ -674,6 +730,7 @@ dc_list[0].append("10.1.1.99")
 print(dc_list[0])      # Output: ['10.1.1.1', '10.1.1.2', '10.1.1.99']
 print(datacenters[0])  # Output: ['10.1.1.1', '10.1.1.2'] (Safely untouched!)
 ```
+
 *(Note: Because `copy.deepcopy()` traverses the entire data structure and duplicates every mutable object, it can use more CPU and memory if your data structure has millions of elements.)*
 
 ---
@@ -681,6 +738,7 @@ print(datacenters[0])  # Output: ['10.1.1.1', '10.1.1.2'] (Safely untouched!)
 ## 8. Tuples: Immutable Lists
 
 ### What is a Tuple (`tuple`)?
+
 A **Tuple** is simply an **immutable list**—an ordered sequence of elements that **cannot be modified** once it is created.
 
 - **Creation Syntax:** Use **parentheses `()`** instead of square brackets `[]`, with elements separated by commas.
@@ -701,10 +759,12 @@ print(device_record[-1])    # Output: 22
 ```
 
 ### Why Do Network Engineers Need Tuples?
+
 1. **Reading Other People's Code & Libraries:** Many built-in Python functions and networking libraries return multiple values packaged together as a `tuple`.
 2. **Protecting Constant Sequences:** If you have a collection of values that should never change during script execution (such as `(hostname, management_ip, vendor)`), storing them in a tuple prevents accidental modification.
 
-### The Classic Tuple "Gotcha": Accidental Commas!
+### The Classic Tuple "Gotcha": Accidental Commas
+
 In Python, it is actually the **comma (`,`)**—not the parentheses—that tells Python to create a tuple! If you accidentally leave a comma at the end of a line or between two strings without brackets, Python will quietly create a `tuple` instead of a `str`.
 
 ```python
@@ -720,6 +780,7 @@ my_router_ip = "10.1.1.1",
 print(type(my_router_ip))  # Output: <class 'tuple'> (NOT a string! Will break Netmiko if passed as an IP!)
 print(my_router_ip)        # Output: ('10.1.1.1',)
 ```
+
 > **Troubleshooting Tip:** If your network automation script throws an error like `AttributeError: 'tuple' object has no attribute 'split'`, check your variable assignments—you probably left an accidental comma at the end of a line!
 
 ---
@@ -729,12 +790,15 @@ print(my_router_ip)        # Output: ('10.1.1.1',)
 Try these four hands-on exercises to practice treating network data systematically using Week 2 concepts.
 
 ### Exercise 1: Subnet Calculator & VLAN Load Balancer (Numbers & Booleans)
+
 Write a short script `subnet_vlan_calc.py` that:
+
 1. Calculates the number of usable hosts in a `/26` IPv4 network ($32 - 26 = 6$ host bits; usable hosts $= 2^6 - 2$).
 2. Calculates link utilization percentage for a $10\text{ Gbps}$ interface carrying $3.333\text{ Gbps}$ of traffic (`(3.333 / 10) * 100`) and rounds it to **2 decimal places** using `round()`.
 3. Checks whether `vlan_id = 204` is an even VLAN using the modulo operator (`%`).
 
 **Example Solution (`subnet_vlan_calc.py`):**
+
 ```python
 #!/usr/bin/env python
 
@@ -758,7 +822,9 @@ print("Is VLAN 204 even?", is_even_vlan)  # True
 ---
 
 ### Exercise 2: Processing CLI Output with Context Managers and List Slices
+
 Imagine you have a text file named `show_ip_int_brief.txt` with the following 6 lines:
+
 ```text
 Interface              IP-Address      OK? Method Status                Protocol
 GigabitEthernet0/0     10.10.1.1       YES NVRAM  up                    up      
@@ -769,12 +835,14 @@ core-rtr-01#
 ```
 
 Write a script `parse_interfaces.py` that:
+
 1. Uses a **`with` context manager** to create `show_ip_int_brief.txt` (using `mode="w"`).
 2. Re-opens `show_ip_int_brief.txt` using a **`with` context manager** in read mode and reads all lines into a list using `.readlines()`.
 3. Uses **list slicing** to remove the first line (the table header at index `0`) and the very last line (the router prompt at index `-1`).
 4. Prints the number of actual interface lines using `len()`, and writes those interface lines to a new file `clean_interfaces.txt`.
 
 **Example Solution (`parse_interfaces.py`):**
+
 ```python
 #!/usr/bin/env python
 
@@ -802,7 +870,9 @@ print("Last interface line:", interface_lines[-1])
 ---
 
 ### Exercise 3: List Manipulation (`append`, `extend`, `pop`, `in`)
+
 In IPython or a script:
+
 1. Create a list of VLANs: `vlans = [10, 20, 30]`.
 2. Use `.append()` to add VLAN `40`.
 3. Use `.extend()` to add `[100, 200]` to the list.
@@ -810,6 +880,7 @@ In IPython or a script:
 5. Remove and capture the very first VLAN (`10`) using `.pop(0)` and the very last VLAN (`200`) using `.pop()`.
 
 **Example Solution:**
+
 ```python
 vlans = [10, 20, 30]
 vlans.append(40)              # [10, 20, 30, 40]
@@ -828,6 +899,7 @@ print("Remaining VLANs:", vlans)     # [20, 30, 40, 100]
 ---
 
 ### Exercise 4: Spot the Memory Bug (Shallow Copy vs. Deep Copy)
+
 A network engineer wrote the code below to create a backup copy of a nested firewall rule table before adding a temporary rule to `candidate_rules`. Why did `production_rules` also get modified, and how do you fix it?
 
 ```python

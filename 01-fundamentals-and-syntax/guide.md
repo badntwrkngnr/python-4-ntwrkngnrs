@@ -4,8 +4,6 @@ source: "Study notes based on Kirk Byers, Learning Python for Network Engineers 
 status: needs-review
 ---
 
-# Learning Python for Network Engineers — Week 1 Study Guide
-
 **Course Reference:** Kirk Byers (*Learning Python for Network Engineers* / [twin-bridges/learning_python](https://github.com/twin-bridges/learning_python))  
 **Target Audience:** Network Engineers transitioning to Network Automation  
 **Language Level:** English (B1/B2 Intermediate)

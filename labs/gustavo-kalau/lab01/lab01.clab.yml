@@ -1,0 +1,29 @@
+name: lab01
+
+prefix: ""
+
+topology:
+  nodes:
+    sw1:
+      kind: arista_ceos
+      image: ceos:4.36.2.f
+    sw2:
+      kind: arista_ceos
+      image: ceos:4.36.2.f
+    pc1:
+      kind: linux
+      image: wbitt/network-multitool:alpine-extra
+      exec:
+        - ip link set eth1 up
+        - ip addr add 192.168.10.11/24 dev eth1
+    pc2:
+      kind: linux
+      image: wbitt/network-multitool:alpine-extra
+      exec:
+        - ip link set eth1 up
+        - ip addr add 192.168.10.12/24 dev eth1
+
+  links:
+    - endpoints: [ "sw1:eth1", "sw2:eth1" ] # trunk entre os switches
+    - endpoints: [ "pc1:eth1", "sw1:eth2" ] # host 1 no switch 1
+    - endpoints: [ "pc2:eth1", "sw2:eth2" ] # host 2 no switch 2

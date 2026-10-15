@@ -13,7 +13,8 @@ The goal of this repository is to **gather everything in one place first** and l
 ├── 03-flow-control/                guide.md   (Week 3)
 └── labs/
     ├── how-network-devices-behave/ hub, ARP cache, switch and router in Python
-    └── leonardo-furtado/           packets-and-Python exercises
+    ├── leonardo-furtado/           packets-and-Python exercises
+    └── gustavo-kalau/              "Do CLI ao Código": containerlab labs + Netmiko
 ```
 
 One topic per numbered folder. Hands-on material that is tied to a specific author lives in `labs/`, grouped by source.
@@ -36,6 +37,7 @@ Each guide follows the same pattern: network analogy → concept → hands-on ex
 | :--- | :--- | :--- |
 | [`labs/how-network-devices-behave`](labs/how-network-devices-behave/) | Simulates an Ethernet hub, an ARP cache, a MAC-learning switch and an IP router with longest-prefix match | Guides 01–03 plus dicts, functions and classes |
 | [`labs/leonardo-furtado`](labs/leonardo-furtado/) | Basic scripts and a small OOP inventory manager | Guide 01 (scripts 01–02); classes (script 05) |
+| [`labs/gustavo-kalau`](labs/gustavo-kalau/) | Containerlab topologies plus Netmiko scripts from the *Do CLI ao Código* series | Guides 01–03 plus dicts and f-strings; Docker and containerlab |
 
 See [`labs/README.md`](labs/README.md) for details.
 
@@ -45,6 +47,7 @@ See [`labs/README.md`](labs/README.md) for details.
 | :--- | :--- | :--- |
 | Guides 01–03 | Kirk Byers, *Learning Python for Network Engineers* ([twin-bridges/learning_python](https://github.com/twin-bridges/learning_python)) | Personal study notes written while following the course |
 | `labs/leonardo-furtado/` | Leonardo Furtado | Exercises collected from his material; add the exact link |
+| `labs/gustavo-kalau/` | Gustavo Kalau, [*Do CLI ao Código*](https://gustavokalau.com.br/do-cli-ao-codigo/) | My own practice code written while following the series; the original material belongs to the author |
 | `labs/how-network-devices-behave/` | **Origin to be documented** | Add the author or course link |
 
 Before publishing or redistributing any of this material, check the license of each original source. The MIT license in this repository covers only the original work in it.
