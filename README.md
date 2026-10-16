@@ -8,9 +8,11 @@ The goal of this repository is to **gather everything in one place first** and l
 
 ```text
 .
-├── 01-fundamentals-and-syntax/     guide.md   (Week 1)
-├── 02-data-types-files-and-lists/  guide.md   (Week 2)
-├── 03-flow-control/                guide.md   (Week 3)
+├── 01-fundamentals-and-syntax/          guide.md   (Week 1)
+├── 02-data-types-files-and-lists/       guide.md   (Week 2)
+├── 03-flow-control/                     guide.md   (Week 3)
+├── 04-sets-dictionaries-and-exceptions/ guide.md   (Week 4)
+├── 05-regular-expressions/              guide.md   (Week 5)
 └── labs/
     ├── how-network-devices-behave/ hub, ARP cache, switch and router in Python
     ├── leonardo-furtado/           packets-and-Python exercises
@@ -26,18 +28,20 @@ One topic per numbered folder. Hands-on material that is tied to a specific auth
 | 01 | [Fundamentals and syntax](01-fundamentals-and-syntax/guide.md) | `venv` and `pip`, IPython REPL, PEP 8 and naming, `input`/`print`, running scripts (shebang, `chmod`) | needs review |
 | 02 | [Data types, files and lists](02-data-types-files-and-lists/guide.md) | numbers, booleans and `None`, files and `with`, lists, mutable vs. immutable, shallow vs. deep copy, tuples | needs review |
 | 03 | [Flow control](03-flow-control/guide.md) | `if`/`elif`/`else`, `for`, `while`, `break`/`continue`, list comprehensions, generator expressions | needs review |
+| 04 | [Sets, dictionaries and exceptions](04-sets-dictionaries-and-exceptions/guide.md) | sets and set operations, dictionaries (lookup, nesting, comprehensions), `try`/`except`/`finally`, `raise`, reading stack traces | needs review |
+| 05 | [Regular expressions](05-regular-expressions/guide.md) | `re.search`, `re.findall`, capture and named groups, greedy vs. non-greedy, `re.MULTILINE`/`re.DOTALL`, `re.escape`, turning CLI output into dictionaries | needs review |
 
 Each guide follows the same pattern: network analogy → concept → hands-on exercises with solutions → cheat sheet.
 
-**Not covered yet:** dictionaries, sets, functions, classes and modules. The labs already use them (see below), so expect the next guides to start there.
+**Not covered yet:** functions, classes and modules. The labs already use them (see below), so expect the next guides to start there. f-strings appear in many examples but still have no section of their own.
 
 ## Labs
 
 | Lab | Description | Prerequisites |
 | :--- | :--- | :--- |
-| [`labs/how-network-devices-behave`](labs/how-network-devices-behave/) | Simulates an Ethernet hub, an ARP cache, a MAC-learning switch and an IP router with longest-prefix match | Guides 01–03 plus dicts, functions and classes |
+| [`labs/how-network-devices-behave`](labs/how-network-devices-behave/) | Simulates an Ethernet hub, an ARP cache, a MAC-learning switch and an IP router with longest-prefix match | Guides 01–04 plus functions, classes and modules (`ipaddress`, `json`) |
 | [`labs/leonardo-furtado`](labs/leonardo-furtado/) | Basic scripts and a small OOP inventory manager | Guide 01 (scripts 01–02); classes (script 05) |
-| [`labs/gustavo-kalau`](labs/gustavo-kalau/) | Containerlab topologies plus Netmiko scripts from the *Do CLI ao Código* series | Guides 01–03 plus dicts and f-strings; Docker and containerlab |
+| [`labs/gustavo-kalau`](labs/gustavo-kalau/) | Containerlab topologies plus Netmiko scripts from the *Do CLI ao Código* series | Guides 01–04 plus f-strings and `**` argument unpacking; Docker and containerlab |
 
 See [`labs/README.md`](labs/README.md) for details.
 
@@ -45,7 +49,7 @@ See [`labs/README.md`](labs/README.md) for details.
 
 | Material | Source | Notes |
 | :--- | :--- | :--- |
-| Guides 01–03 | Kirk Byers, *Learning Python for Network Engineers* ([twin-bridges/learning_python](https://github.com/twin-bridges/learning_python)) | Personal study notes written while following the course |
+| Guides 01–05 | Kirk Byers, *Learning Python for Network Engineers* ([twin-bridges/learning_python](https://github.com/twin-bridges/learning_python)) | Personal study notes written while following the course |
 | `labs/leonardo-furtado/` | Leonardo Furtado | Exercises collected from his material; add the exact link |
 | `labs/gustavo-kalau/` | Gustavo Kalau, [*Do CLI ao Código*](https://gustavokalau.com.br/do-cli-ao-codigo/) | My own practice code written while following the series; the original material belongs to the author |
 | `labs/how-network-devices-behave/` | **Origin to be documented** | Add the author or course link |

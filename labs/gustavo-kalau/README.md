@@ -44,7 +44,8 @@ Only the topology file exists so far; the automation code for this lab has not b
 | You need | Where it comes from |
 | :--- | :--- |
 | Lists, `for` loops, variables, running scripts | [Guides 01–03](../../README.md#learning-path) |
-| Dictionaries, f-strings and `**` argument unpacking (used to build the Netmiko connection) | not covered in the guides yet |
+| Dictionaries (each Netmiko device is a `dict`) and `try`/`except` | [Guide 04](../../04-sets-dictionaries-and-exceptions/guide.md) |
+| f-strings and `**` argument unpacking (used to build the Netmiko connection) | not covered in the guides yet |
 | Netmiko (see the [Week 1 guide](../../01-fundamentals-and-syntax/guide.md) for what it does) | `requirements.txt` in this folder |
 | Docker and containerlab | installed on the machine that runs the labs |
 | Router/switch images | **not included**: import the Arista cEOS image as `ceos:4.36.2.f` and build the Cisco IOL images locally (for example with [hellt/vrnetlab](https://github.com/hellt/vrnetlab)) |
@@ -69,5 +70,5 @@ To check the result, run `show vlan` on the switches and `docker exec pc1 ping -
 ## Notes
 
 - **Credentials:** `config_vlan.py` keeps the lab credentials inline for simplicity. That is acceptable in a disposable lab and nowhere else; moving them to environment variables or SSH keys is the natural first refactor.
-- **`requirements.txt`** is a full `pip freeze` from the practice repository, so it includes transitive dependencies. It also lists `ntc_templates` and `textfsm` for parsing `show` output, which the scripts do not use yet.
+- **`requirements.txt`** is a full `pip freeze` from the practice repository, so it includes transitive dependencies. It also lists `ntc_templates` and `textfsm` for parsing `show` output, which the scripts do not use yet. The [regular expressions guide](../../05-regular-expressions/guide.md) covers the idea underneath: turning raw CLI text into structured data.
 - **`*.annotations.json`** only store node positions for the containerlab VS Code extension. They can be ignored.
